@@ -7,8 +7,10 @@ Project for comp 473
 2. Download the data
    - Go to https://tc11.cvc.uab.es/datasets/ICFHR-CROHME-2016_1
    - Create an account and download the zip file
-   - You only need the following two folders CROHME2016_data:
+   - You only need the following two folders from CROHME2016_data:
       - Task-1-Formula
       - Task-2-Symbols
+   - You need this folder from CROHME2013_DATA:
+      - TrainINKML
    - Unzip all the files (can take a while)
    - Put them in your local data repository
