@@ -2,7 +2,8 @@
 Project for comp 473 
 
 1. Download the required dependencies 
-   - python -m pip install -r requirements.txt
+   - python -m pip install -r requirements.txt (if you use pip and venv)
+   - conda install --file requirements.txt (if you use conda)
 
 2. Download the data
    - Go to https://tc11.cvc.uab.es/datasets/ICFHR-CROHME-2016_1
