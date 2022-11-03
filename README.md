@@ -15,3 +15,7 @@ Project for comp 473
       - TrainINKML
    - Unzip all the files (can take a while)
    - Put them in your local data repository
+   
+3. Convert the data from inkml to png
+   - To convert all the files from a directory and its subdirectories, use : src/data_processing/convertfiles.py
+   - To convert files from one directory or one file, use: src/data_processing/convertInkmlToImg.py
