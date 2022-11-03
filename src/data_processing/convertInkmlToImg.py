@@ -255,8 +255,8 @@ if __name__ == '__main__':
         dim = 300 if len(sys.argv) < 3 else int(sys.argv[2])
         padding = 0 if len(sys.argv) < 4 else int(sys.argv[3])
 
-        print("Starting inkml to png conversion on {} file{}\n".format(
-            len(FILES), "s" if len(FILES) > 1 else ""
+        print("Starting inkml to png conversion on {} file{} in folder {}\n".format(
+            len(FILES), "s" if len(FILES) > 1 else "", folder_name
             ))
 
         for idx, file in enumerate(FILES):
@@ -271,8 +271,10 @@ if __name__ == '__main__':
                 print("\n\nInkml file not found:\n\t{}".format(img_path + os.sep + img_name))
                 exit()
 
-            traces = parse_inkml(img_path + os.sep + img_name)
-
+            try:
+                traces = parse_inkml(img_path + os.sep + img_name)
+            except:
+                print('error when processing:', img_path + os.sep + img_name)
             selected_tr = get_traces_data(traces)
             im = convert_to_imgs(selected_tr, dim)
 
