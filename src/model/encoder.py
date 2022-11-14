@@ -12,7 +12,7 @@ class Encoder(nn.Module):
         self.blstm = nn.LSTM(input_size, hidden_size, bidirectional=True)
         self.linear = nn.Linear(input_size, 1)
 
-    def forward(self, batch, hidden=None):
+    def forward(self, batch, hidden=None, linear=False):
         preprocess = (
             torch.transpose(torch.transpose(torch.flatten(batch, -2, -1), -2, -1), 0, 1)
             if batch.shape != (self.seq_size, self.batch_size, self.input_size)
@@ -21,7 +21,8 @@ class Encoder(nn.Module):
         output, (hidden, _) = (
             self.blstm(preprocess, hidden) if hidden else self.blstm(preprocess)
         )
-        output, hidden = self.linear(output), self.linear(
-            hidden.transpose(0, 1).flatten(-2, -1)
-        )
+        if linear:
+            output, hidden = self.linear(output), self.linear(
+                hidden.transpose(0, 1).flatten(-2, -1)
+            )
         return output, hidden
