@@ -10,7 +10,7 @@ class Encoder(nn.Module):
         self.seq_size = seq_size
         self.batch_size = batch_size
         self.blstm = nn.LSTM(input_size, hidden_size, bidirectional=True)
-        self.linear = nn.Linear(input_size, 1)
+        self.linear = nn.Linear(input_size, 256)
 
     def forward(self, batch, hidden=None, linear=False):
         preprocess = (
