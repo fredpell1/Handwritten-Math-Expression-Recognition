@@ -33,8 +33,8 @@ def main(in_directory=None, out_directory=None, dim=None, padding=None):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--indir', default='data\CROHME2016_data\Task-2-Symbols')
-    parser.add_argument('--outdir', default = 'data\\CROHME2016_data\\data_png\\')
+    parser.add_argument('--indir', default='data\Task-2-Symbols')
+    parser.add_argument('--outdir', default='data\\data_png\\')
     parser.add_argument('--dim', default='300')
     parser.add_argument('--padding', default='2')
 
