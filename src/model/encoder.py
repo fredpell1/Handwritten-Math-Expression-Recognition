@@ -18,11 +18,11 @@ class Encoder(nn.Module):
             if batch.shape != (self.seq_size, self.batch_size, self.input_size)
             else batch
         )
-        output, (hidden, _) = (
+        output, (hidden, c) = (
             self.blstm(preprocess, hidden) if hidden else self.blstm(preprocess)
         )
         if linear:
             output, hidden = self.linear(output), self.linear(
                 hidden.transpose(0, 1).flatten(-2, -1)
             )
-        return output, hidden
+        return output, hidden, c
