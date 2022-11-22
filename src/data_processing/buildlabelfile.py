@@ -9,7 +9,8 @@ def find_files(dir_name):
     directories = find_all_subdirectories(dir_name)
     for dir in directories:
         for file in os.listdir(dir):
-            yield os.path.join(dir, file)
+            if file.endswith('inkml'):
+                yield os.path.join(dir, file)
 
 
 def find_label(file: str):
@@ -26,7 +27,7 @@ def main(src_dir, target_file):
             data[file] = find_label(f.read())
     with open(target_file, "w") as csvfile:
         for key, item in data.items():
-            csvfile.write(f"{key}, {item}\n")
+            csvfile.write(f"{key} \",\" {item}\n")
 
 
 if __name__ == "__main__":
