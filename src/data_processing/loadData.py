@@ -32,7 +32,7 @@ class HMEDataset(Dataset):
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
-        return image, label
+        return image, label, idx
 
     def __find_path(self, idx):
         regex = "TrainINKML\\\\(?P<folder>.*)\\\\(?P<file>.*)\.inkml"
