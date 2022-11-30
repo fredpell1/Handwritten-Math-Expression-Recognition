@@ -1,59 +1,50 @@
-import torch.nn as nn
+import torch
 import torch.nn.functional as F
 
 
-class ConvNormRelu(nn.Module):
+class ConvNormRelu(torch.nn.Module):
     """A stack of a convolutional net, a batch norm, and a ReLu"""
 
     def __init__(
         self, in_channels, out_channels, kernel_size, dropout=False, p=0.2
     ) -> None:
         super().__init__()
-        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size)
-        self.batchNorm = nn.BatchNorm2d(out_channels)
+        self.conv = torch.nn.Conv2d(in_channels, out_channels, kernel_size)
+        self.batchNorm = torch.nn.BatchNorm2d(out_channels)
         self.dropout = dropout
         self.p = p
 
     def forward(self, batch):
         if self.dropout:
-            batch = nn.Dropout(self.p)(batch)
+            batch = torch.nn.Dropout(self.p)(batch)
         return F.relu(self.batchNorm(self.conv(batch)))
 
 
-class CNN(nn.Module):
+class CNN(torch.nn.Module):
     """CNN for feature extraction"""
 
-    def __init__(self) -> None:
+    def __init__(self, device) -> None:
         super().__init__()
-
-        self.layer1 = nn.Sequential(
-            ConvNormRelu(1, 100, (3, 3)),
-            ConvNormRelu(100, 100, (3, 3)),
-            ConvNormRelu(100, 100, (3, 3)),
-            nn.MaxPool2d((2, 2)),
+        self.layer1 = torch.nn.Sequential(
+            ConvNormRelu(1,64,(3,3)),
+            torch.nn.MaxPool2d((2,2))
         )
 
-        self.layer2 = nn.Sequential(
-            ConvNormRelu(100, 200, (3, 3)),
-            ConvNormRelu(200, 200, (3, 3)),
-            ConvNormRelu(200, 200, (3, 3)),
-            nn.MaxPool2d((2, 2)),
+        self.layer2 = torch.nn.Sequential(
+            ConvNormRelu(64,128,(3,3)),
+            torch.nn.MaxPool2d((2,2))
         )
 
-        self.layer3 = nn.Sequential(
-            ConvNormRelu(200, 300, (3, 3), True, 0.2),
-            ConvNormRelu(300, 300, (3, 3), True, 0.2),
-            ConvNormRelu(300, 300, (3, 3), True, 0.2),
-            nn.MaxPool2d((1, 2)),
+        self.layer3 = torch.nn.Sequential(
+            ConvNormRelu(128,256,(3,3)),
+            ConvNormRelu(256,256,(3,3)),
+            torch.nn.MaxPool2d((1,2)),
+            ConvNormRelu(256,512,(3,3)),
+            torch.nn.MaxPool2d((2,1))
         )
 
-        self.layer4 = nn.Sequential(
-            ConvNormRelu(300, 400, (3, 3), True, 0.2),
-            ConvNormRelu(400, 400, (3, 3), True, 0.2),
-            ConvNormRelu(400, 400, (3, 3), True, 0.2),
-            nn.MaxPool2d((2, 1)),
-            ConvNormRelu(400, 512, (3, 3), True, 0.2),
-        )
+
+        self.layer4 = ConvNormRelu(512,512,(3,3)).to(device)
 
     def forward(self, batch):
         out = self.layer1(batch)
