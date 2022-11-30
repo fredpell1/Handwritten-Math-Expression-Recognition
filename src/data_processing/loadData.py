@@ -8,9 +8,13 @@ from torchvision.io import read_image
 import pandas as pd
 from matplotlib import pyplot as plt
 
+# dataset
 class HMEDataset(Dataset):
     def __init__(self, annotations_file, img_dir, transform=None, target_transform=None, problem_type='symbols'):
-        self.img_labels = pd.read_csv(annotations_file, header=None, sep='","')
+        if problem_type is 'formula':
+          self.img_labels = pd.read_csv(annotations_file, header=None, sep='","')
+        else:
+          self.img_labels = pd.read_csv(annotations_file, header=None)
         self.img_dir = img_dir
         self.transform = transform
         self.target_transform = target_transform
@@ -22,7 +26,7 @@ class HMEDataset(Dataset):
         if self.problem_type is 'symbols':
             filename = 'iso' + str(idx) + '.png'
             img_path = os.path.join(self.img_dir, filename)
-            label = self.img_labels.iloc[idx, 0]
+            label = self.img_labels.iloc[idx, 1]
         if self.problem_type is 'formula':
             img_path = self.__find_path(idx)
             label = self.img_labels.iloc[idx,1]
@@ -43,19 +47,3 @@ class HMEDataset(Dataset):
             raise RuntimeError(f'File not found for idx {idx}')
         new_path = os.path.join(self.img_dir, f"data_png_{d['folder']}",f"{d['file']}.png")
         return new_path
-
-"""
-labels = 'data/iso_GT.csv'
-images = 'data/data_png/data_png_trainingSymbols/'
-
-train_data = HMEDataset(labels, images)
-
-train_dataloader = DataLoader(train_data, 20)
-
-train_features, train_labels = next(iter(train_dataloader))
-# img = train_features[1].squeeze()
-# label = train_labels[1]
-# plt.imshow(img, cmap="gray")
-# plt.show()
-print(train_labels)
-"""
