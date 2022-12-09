@@ -37,5 +37,5 @@ class Decoder(torch.nn.Module):
         new_h = torch.cat((hn, c), -1).to(self.device)
         new_h = torch.tanh(self.Wc(new_h)).to(self.device)
         output, (hidden, cn) = self.lstm(input, (new_h, cn))
-        probability = self.softmax_out(self.Wout(output))
+        probability = self.Wout(output)
         return output, (new_h, cn), probability
